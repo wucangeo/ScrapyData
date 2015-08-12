@@ -18,6 +18,12 @@ DEFAULT_ITEM_CLASS = 'ScrapyData.items.Website'
 
 ITEM_PIPELINES = {'ScrapyData.pipelines.FilterWordsPipeline': 1}
 
+# COOKIES_ENABLED = False
+
+# RETRY_ENABLED = False
+
+# DOWNLOAD_TIMEOUT = 15
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ScrapyData (+http://www.yourdomain.com)'
