@@ -1,4 +1,6 @@
-# -*- coding:utf-8 -*-
+# -*- coding: utf-8 -*-
+import os, sys
+
 from scrapy.spiders import Spider
 from scrapy.selector import Selector
 
@@ -7,9 +9,9 @@ from ScrapyData.items import Website
 
 class LandSpider(Spider):
     name = "land"
-    allowed_domains = ["beijing.tuliu.com"]
+    allowed_domains = ["tuliu.com"]
     start_urls = [
-        "http://beijing.tuliu.com/list-pg1.html#sub_list_b"
+        "http://pinggu.tuliu.com/view-368720.html"
     ]
 
     def parse(self, response):
@@ -21,15 +23,19 @@ class LandSpider(Spider):
         @scrapes name
         """
         sel = Selector(response)
-        sites = sel.xpath('//div[@class="sortlist_cont"]')
+        sites = sel.xpath('//div[@class="attribute"]')
         items = []
 
         for site in sites:
             item = Website()
 
-            item['name'] = site.xpath('div[@class="box2"]/text()').extract()
-            item['url'] = site.xpath('div[@class="box1"]//p[@class="txt1"]/text()').extract()
-            item['description'] = "bbb"
+            names = site.xpath('string(dl/dd[1]/p[2]/a/text())').extract()
+            nameitem = []
+            for name in names:
+                nameitem.append(name.encode('unicode-escape'))
+            item['name'] = nameitem
+            item['url'] = site.xpath('string(dl/dd[2]/p[2]/a/text())').extract()
+            item['description'] = site.xpath('string(dl/dd[3]/p[2]/text())').extract()
             items.append(item)
 
         return items
