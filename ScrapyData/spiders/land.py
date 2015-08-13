@@ -1,3 +1,4 @@
+
 # -*- coding:utf-8 -*-
 import scrapy
 from scrapy.spiders import CrawlSpider, Rule
@@ -16,7 +17,7 @@ class LandSpider(Spider):
     # ]
     start_urls = [
         "http://tuliu.com/view-372131.html"
-    ]
+
     # 获取100条
     # initUrl = "http://tuliu.com/view-3721"
     # for i in range(100):
