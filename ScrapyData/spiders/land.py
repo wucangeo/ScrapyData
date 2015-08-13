@@ -17,9 +17,17 @@ class LandSpider(Spider):
     start_urls = [
         "http://tuliu.com/view-372131.html"
     ]
-    initUrl = "http://tuliu.com/view-3721"
-    for i in range(100):
-        url = initUrl + str(i).zfill(2) + ".html"
+    # 获取100条
+    # initUrl = "http://tuliu.com/view-3721"
+    # for i in range(100):
+    #     url = initUrl + str(i).zfill(2) + ".html"
+    #     print(url)
+    #     start_urls.append(url)
+
+    # 获取10条
+    initUrl = "http://tuliu.com/view-37213"
+    for i in range(10):
+        url = initUrl + str(i) + ".html"
         print(url)
         start_urls.append(url)
 
@@ -37,11 +45,11 @@ class LandSpider(Spider):
         for site in sites:
             item = Website()
 
-            names = site.xpath('string(dl/dd[1]/p[2]/a/text())').extract()
-            nameitem = []
-            for name in names:
-                nameitem.append(name.encode('unicode-escape'))
-            item['name'] = nameitem
+            # names = site.xpath('string(dl/dd[1]/p[2]/a/text())').extract()
+            # nameitem = []
+            # for name in names:
+            #     nameitem.append(name.encode('unicode-escape'))
+            item['name'] = site.xpath('string(dl/dd[1]/p[2]/a/text())').extract()
             item['url'] = site.xpath('string(dl/dd[2]/p[2]/a/text())').extract()
             item['description'] = site.xpath('string(dl/dd[3]/p[2]/text())').extract()
             items.append(item)
