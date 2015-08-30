@@ -20,13 +20,13 @@ class LandSpider(Spider):
     name = "land"
     allowed_domains = ["tuliu.com"]
     start_urls = [
-        "http://pinggu.tuliu.com/view-300000.html"
+        "http://pinggu.tuliu.com/view-310000.html"
     ]
 
-    # 获取1000条
-    initUrl = "http://tuliu.com/view-30"
-    for i in range(1,10000):
-        url = initUrl + str(i).zfill(4) + ".html"
+    # 获取10000条
+    initUrl = "http://tuliu.com/view-3"
+    for i in range(10000,100000):
+        url = initUrl + str(i).zfill(5) + ".html"
         start_urls.append(url)
 
     # 获取100条
