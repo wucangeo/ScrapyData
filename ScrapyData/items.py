@@ -9,7 +9,13 @@ from scrapy.item import Item, Field
 
 
 class Website(Item):
-
     name = Field()
     url = Field()
     description = Field()
+
+
+
+    # siteid = Field()
+    # tname = Field()
+    # turl = Field()
+    # description = Field()

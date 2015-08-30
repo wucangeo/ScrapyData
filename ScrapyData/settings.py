@@ -16,7 +16,7 @@ NEWSPIDER_MODULE = 'ScrapyData.spiders'
 
 DEFAULT_ITEM_CLASS = 'ScrapyData.items.Website'
 
-ITEM_PIPELINES = {'ScrapyData.pipelines.FilterWordsPipeline': 1}
+# ITEM_PIPELINES = {'ScrapyData.pipelines.FilterWordsPipeline': 1}
 
 # ITEM_PIPELINES = {'ScrapyData.pipelines.JsonWriterPipeline': 800}
 

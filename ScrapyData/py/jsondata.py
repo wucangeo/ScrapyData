@@ -6,8 +6,6 @@ except ImportError:
     import simplejson as json
 from pprint import pprint
 import codecs
-import sys
-import chardet
 
 input_file = file('data4.json', 'r')
 
