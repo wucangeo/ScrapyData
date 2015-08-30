@@ -20,8 +20,14 @@ class LandSpider(Spider):
     name = "land"
     allowed_domains = ["tuliu.com"]
     start_urls = [
-        "http://pinggu.tuliu.com/view-368720.html"
+        "http://pinggu.tuliu.com/view-300000.html"
     ]
+
+    # 获取1000条
+    initUrl = "http://tuliu.com/view-30"
+    for i in range(1,10000):
+        url = initUrl + str(i).zfill(4) + ".html"
+        start_urls.append(url)
 
     # 获取100条
     # initUrl = "http://tuliu.com/view-3721"
@@ -30,12 +36,12 @@ class LandSpider(Spider):
     #     print(url)
     #     start_urls.append(url)
 
-    # 获取10条
-    initUrl = "http://tuliu.com/view-36872"
-    for i in range(1, 10):
-        url = initUrl + str(i) + ".html"
-        start_urls.append(url)
-        # print(url)
+    # # 获取10条
+    # initUrl = "http://tuliu.com/view-36872"
+    # for i in range(1, 10):
+    #     url = initUrl + str(i) + ".html"
+    #     start_urls.append(url)
+    #     # print(url)
     def ConnDB(self):
         self.conn = MySQLdb.connect(host='localhost', user='wucan', passwd='wucan', charset='utf8')
         self.conn.select_db('land')
@@ -48,7 +54,10 @@ class LandSpider(Spider):
         @url http://www.dmoz.org/Computers/Programming/Languages/Python/Resources/
         @scrapes name
         """
+
+
         sel = Selector(response)
+        title = sel.xpath('//title/text()').extract()[0]
         sites = sel.xpath('//div[@class="content-table clearfix"]')
         items = []
         data = []
@@ -65,8 +74,6 @@ class LandSpider(Spider):
 
         for site in sites:
             item = Website()
-
-
             # item['name'] = site.xpath('string(dl/dd[1]/p[2]/a/text())').extract()
             # item['url'] = site.xpath('string(dl/dd[2]/p[2]/a/text())').extract()
             # item['description'] = site.xpath('string(dl/dd[3]/p[2]/text())').extract()
@@ -80,26 +87,31 @@ class LandSpider(Spider):
             sumprice = site.xpath('string(dl[7]/dd/li/text())').extract()[0]
             paytype = site.xpath('string(dl[8]/dd/text())').extract()[0]
             # if len(tname) != 0 or len(tuser) != 0 or len(tdescription) != 0:
-            data.extend([landtype, cirproperty, pubtime,updatetime,sumarea,ciryear,sumprice,paytype])
+            data.extend([title,landtype, cirproperty, pubtime,updatetime,sumarea,ciryear,sumprice,paytype])
 
         # return items
         # print "length of data:",len(data)
         if len(data) != 0:
             data.append(cururl)
-            print data
+            urlindex = 0
+            cururlSpl = cururl.split('-')
+            if len(cururlSpl) == 2:
+                indexhtml = cururlSpl[1]
+                indexhtmlSpl = indexhtml.split('.')
+                if len(indexhtmlSpl) == 2:
+                    urlindex = indexhtmlSpl[0]
+                    data.append(urlindex)
 
-            # 处理时间
-            # print "testttttt",landtype,cirproperty,pubtime
-
-            self.ConnDB()
             # SQL 插入语句
-            sql = "INSERT INTO land(landtype,cirproperty,pubtime,updatetime,sumarea,ciryear,sumprice,paytype,cururl) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)"
+            self.ConnDB()
+            sql = "INSERT INTO land(title,landtype,cirproperty,pubtime,updatetime,sumarea,ciryear,sumprice,paytype,cururl,urlindex) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
             try:
                 # 执行sql语句
                 self.cur.execute(sql,data)
                 # 提交到数据库执行
                 self.conn.commit()
-                print "insert succ"
+                print cururl
+                # print "insert succ"
             except Exception as e:
                 # time.sleep(30)
                 print "insert error",type(e), e
@@ -108,4 +120,4 @@ class LandSpider(Spider):
             # 关闭数据库连接
             self.conn.close()
         # print data
-        # time.sleep(1)
+        time.sleep(1)
