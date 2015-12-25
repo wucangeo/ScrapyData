@@ -100,3 +100,4 @@ class LandSpider(Spider):
         # # # 收尾工作，关闭数据库连接
         # self.cur.close()
         # self.conn.close()
+        
