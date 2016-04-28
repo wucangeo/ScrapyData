@@ -7,7 +7,8 @@ from scrapy.exporters import JsonItemExporter
 from scrapy.spiders import Spider
 from scrapy.selector import Selector
 from ScrapyData.items import Website
-import time
+# import time
+import pip, os, time
 import MySQLdb
 
 class LandSpider(Spider):
@@ -20,14 +21,14 @@ class LandSpider(Spider):
     name = "land"
     allowed_domains = ["tuliu.com"]
     start_urls = [
-        "http://pinggu.tuliu.com/view-310000.html"
+        "http://www.tuliu.com/view-360000.html"
     ]
 
     # 获取10000条
-    initUrl = "http://tuliu.com/view-3"
-    for i in range(10000,100000):
-        url = initUrl + str(i).zfill(5) + ".html"
-        start_urls.append(url)
+    # initUrl = "http://tuliu.com/view-3"
+    # for i in range(10000,100000):
+    #     url = initUrl + str(i).zfill(5) + ".html"
+    #     start_urls.append(url)
 
     # 获取100条
     # initUrl = "http://tuliu.com/view-3721"
@@ -37,11 +38,12 @@ class LandSpider(Spider):
     #     start_urls.append(url)
 
     # # 获取10条
-    # initUrl = "http://tuliu.com/view-36872"
-    # for i in range(1, 10):
-    #     url = initUrl + str(i) + ".html"
-    #     start_urls.append(url)
-    #     # print(url)
+    initUrl = "http://tuliu.com/view-36954"
+    for i in range(1, 10):
+        url = initUrl + str(i) + ".html"
+        start_urls.append(url)
+        # print(url)
+
     def ConnDB(self):
         self.conn = MySQLdb.connect(host='localhost', user='wucan', passwd='wucan', charset='utf8')
         self.conn.select_db('land')
@@ -58,7 +60,7 @@ class LandSpider(Spider):
 
         sel = Selector(response)
         title = sel.xpath('//title/text()').extract()[0]
-        sites = sel.xpath('//div[@class="content-table clearfix"]')
+        sites = sel.xpath('//div[@class="supply_cont"]')
         items = []
         data = []
 
@@ -78,9 +80,9 @@ class LandSpider(Spider):
             # item['url'] = site.xpath('string(dl/dd[2]/p[2]/a/text())').extract()
             # item['description'] = site.xpath('string(dl/dd[3]/p[2]/text())').extract()
             # items.append(item)
-            landtype = site.xpath('string(dl[1]/dd/a/text())').extract()[0]
+            landtype = site.xpath('string(div[@class="supply_pictxt"]/span[@class="txt_yel"]/text())').extract()[0]
             cirproperty = site.xpath('string(dl[2]/dd/a/text())').extract()[0]
-            pubtime = site.xpath('string(dl[3]/dd/text())').extract()[0]
+            pubtime = site.xpath('string(dl[6]/dd/text())').extract()[0]
             updatetime = site.xpath('string(dl[4]/dd/text())').extract()[0]
             sumarea = site.xpath('string(dl[5]/dd/text())').extract()[0]
             ciryear = site.xpath('string(dl[6]/dd/text())').extract()[0]
